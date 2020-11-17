@@ -56,13 +56,13 @@ public:
     }
     void remove(int array[], int k)
     {
-        for (int j = 0; j < arraySize - 1; j++)
+        for (int j = 0; j < arraySize; j++)
         {
             if (array[j] == k)
             {
                 for (int l = j; l < arraySize - 1; l++)
                     array[l] = array[l + 1];
-                array[arraySize] = 0;
+                array[arraySize-1] = 0;
             }
         }
     }
@@ -96,7 +96,7 @@ public:
     {
         int tmp;
         int j = 0;
-        for (int i = arraySize; i >= arraySize / 2; i--)
+        for (int i = arraySize-1; i > arraySize / 2; i--)
         {
             tmp = array[i];
             array[i] = array[j];
