@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-    studente::studente stud = new studente();
+    studente stud;
     cout << "inserisci nome: "; 
     string nome;
     cin >> nome;
@@ -19,7 +19,6 @@ int main() {
     cin >> eta;
     stud.setMatricola(eta);
     cout << "attributi studente inseriti: " << stud.getNome() << ", " << stud.getCognome() << ", " <<
-        stud.getEta() << ", " << stud.getMatricola() << ", " << endl; 
-        
-    delete stud;
+        stud.getEta() << ", " << stud.getMatricola() << ", " << endl;
+    return 0;
 }
