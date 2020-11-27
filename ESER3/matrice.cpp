@@ -65,12 +65,18 @@ matrice::~matrice()
 
 tipoelem matrice::leggimatrice(const int &r, const int &c)
 {
-    return elementi[r][c];
+    if ((r > righe) || (c > colonne))
+        throw "Index out of bound";
+    else
+        return elementi[r][c];
 }
 
 void matrice::scrivimatrice(const int &r, const int &c, const tipoelem &val)
 {
-    elementi[r][c] = val;
+    if ((r > righe) || (c > colonne))
+        throw "Index out of bound";
+    else
+        elementi[r][c] = val;
 }
 
 void matrice::prodottoScalare(const double &scalare)
@@ -114,14 +120,17 @@ matrice matrice::prodotto(const matrice &mat)
     }
 }
 
- std::string matrice::toString() {
-     std::string matAsString;
+std::string matrice::toString()
+{
+    std::string matAsString;
 
-    for(int i = 0; i < righe; i++) {
-        for (int j = 0; j < colonne; j++) {
-              matAsString.append("["+ std::to_string(elementi[i][j]) + "]");
+    for (int i = 0; i < righe; i++)
+    {
+        for (int j = 0; j < colonne; j++)
+        {
+            matAsString.append("[" + std::to_string(elementi[i][j]) + "]");
         }
         matAsString.append("\n");
     }
     return matAsString;
- }
+}
