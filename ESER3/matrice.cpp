@@ -23,6 +23,10 @@ matrice::matrice(const matrice &mat)
 {
     righe = mat.righe;
     colonne = mat.colonne;
+    elementi = new tipoelem*[righe];
+    for (int i = 0; i < righe; i++) {
+        elementi[righe] = new tipoelem[colonne];
+    } 
     for (int i = 0; i < righe; i++)
     {
         for (int j = 0; j < colonne; j++)
@@ -30,21 +34,20 @@ matrice::matrice(const matrice &mat)
     }
 }
 
-//costruttore di assegnamento
+//costruttore di assegnamento MANCA ISTANZIAZIONE TIPOELEM
 matrice &matrice::operator=(const matrice &mat)
 {
-    if (&mat == this)
-        return *this;
+    if (&mat == this) return *this;
     else
     {
-        for (int i = 0; i < righe; i++)
-        {
-            delete elementi[i];
-        }
-        delete elementi;
+       this->~matrice();
 
         righe = mat.righe;
         colonne = mat.colonne;
+        elementi = new tipoelem*[righe];
+    for (int i = 0; i < righe; i++) {
+        elementi[righe] = new tipoelem[colonne];
+    }
         for (int i = 0; i < righe; i++)
         {
             for (int j = 0; j < colonne; j++)
