@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "linked_list.h"
+#include "Ordered_list.h"
 #include <iostream>
 
 using namespace std;
@@ -37,7 +38,9 @@ int main()
     list1.insert(x, list1.begin());
     x = 3;
     list1.insert(x, list1.begin());
-    x = 4;
+    x = 2;
+    list1.insert(x, list1.begin());
+    x = 1;
     list1.insert(x, list1.begin());
 
     /* visualizing the list list1 */
@@ -69,11 +72,17 @@ int main()
         cout << "list1 == list2" << endl;
     else
         cout << "list1 != list2" << endl;
-        
+    list1.reverse();
     cout << "reverse of list1: " << list1;
     if (list1.palindrome())
-        cout << "palindrome";
+        cout << "palindrome" << endl;
     else
-        cout << "not palindrome";
+        cout << "not palindrome" << endl;
     return 0;
+    Linked_list<string> l3;
+    l3.push_back("abba");
+    l3.push_back("cafo");
+    l3.push_back("esso");
+    Ordered_list<string> l4(l3);
+    l4.insert("basso");
 }

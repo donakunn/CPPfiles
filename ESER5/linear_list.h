@@ -48,8 +48,8 @@ public:
     virtual void erase(position pos) = 0;                    // ersaes the element at position pos
 
     // funzioni di servizio
-    int size() const;                  // returns the size of the list
-    virtual position last() const = 0; //returns a position pointing to last element of the list
+    int size() const;      // returns the size of the list
+    position last() const; //returns a position pointing to last element of the list
     template <class U, class Q>
     friend ostream &operator<<(ostream &, const Linear_list<U, Q> &);
     void push_front(const value_type &); // insert a new element at the beginning
@@ -74,6 +74,7 @@ int Linear_list<T, P>::size() const
     }
     return sizeList;
 }
+
 /* sovraccarica <<. Attenzione se il tipo restituito da read non Ã¨ primitivo, allora
  * anche per questo tipo bisogna sovraccaricare l'operatore << 
  */
@@ -104,7 +105,12 @@ void Linear_list<T, P>::push_front(const value_type &a)
 template <class T, class P>
 void Linear_list<T, P>::push_back(const value_type &a)
 {
-    this->insert(a, this->next(last()));
+    position lastPosition = this->begin();
+    while (!end(next(lastPosition)))
+    {
+        lastPosition = next(lastPosition);
+    }
+    this->insert(a, this->next(lastPosition));
 }
 template <class T, class P>
 void Linear_list<T, P>::pop_front()
@@ -114,7 +120,12 @@ void Linear_list<T, P>::pop_front()
 template <class T, class P>
 void Linear_list<T, P>::pop_back()
 {
-    this->erase(last());
+    position lastPosition = this->begin();
+    while (!end(next(lastPosition)))
+    {
+        lastPosition = next(lastPosition);
+    }
+    this->erase(lastPosition);
 }
 template <class T, class P>
 void Linear_list<T, P>::clear()
@@ -130,17 +141,21 @@ void Linear_list<T, P>::clear()
 template <class T, class P>
 void Linear_list<T, P>::reverse()
 {
-    typename Linear_list<T, P>::position pFront,pBack;
+    typename Linear_list<T, P>::position pFront, pBack;
     pFront = this->begin();
-    pBack = this->last();
-    value_type tmp;
-    while (pFront != pBack)
+    pBack = this->begin();
+    while (!end(next(pBack)))
     {
-        tmp = this->read(pFront);
-        this->insert(this->read(pBack),pFront);
-        this->insert(tmp,pBack);
-        pFront = this->next(pFront);
-        pBack = this->previous(pBack);
+        pBack = next(pBack);
+    }
+    Linear_list<T, P>::value_type tmp;
+    while (pFront != pBack && pBack != previous(pFront))
+    {
+        tmp = read(pFront);
+        write(read(pBack), pFront);
+        write(tmp, pBack);
+        pFront = next(pFront);
+        pBack = previous(pBack);
     }
 }
 template <class T, class P>
@@ -148,14 +163,19 @@ bool Linear_list<T, P>::palindrome() const
 {
     typename Linear_list<T, P>::position pFront, pBack;
     pFront = this->begin();
-    pBack = this->last();
-    while (pFront != pBack)
+    pBack = this->begin();
+    while (!end(next(pBack)))
     {
-        if (this->read(pFront) != this->read(pBack))
+        pBack = next(pBack);
+    }
+    while (pFront != pBack && pBack != previous(pFront))
+    {
+        if (read(pFront) != read(pBack))
             return false;
-        else {
-            pFront = this->next(pFront);
-            pBack = this->previous(pBack);
+        else
+        {
+            pFront = next(pFront);
+            pBack = previous(pBack);
         }
     }
     return true;
