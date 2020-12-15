@@ -1,16 +1,24 @@
-#include "dequeue.h"
+#include "codapt.h"
 #include <iostream>
 using namespace std;
 
 int main(){
-    dequeue<int> coda;
-    coda.push_back(3);
-    coda.push_front(7);
-    coda.push_front(8);
+    Coda<int> coda;
+    coda.inCoda(3);
+    coda.inCoda(7);
+    coda.inCoda(8);
+
+    Coda<int> coda2;
+    coda2.inCoda(4);
+    coda2.inCoda(4);
+    coda2.inCoda(4);
+    coda2 = coda;
+    stampaCoda(coda2);
     int tmp;
-    while (!coda.dequeueVuota()) {
-        tmp = coda.pop_front();
+    while (!coda2.codaVuota()) {
+        tmp = coda2.leggiCoda();
         cout << tmp << " ";
+        coda2.fuoriCoda();
     }
 return 0;
 }
