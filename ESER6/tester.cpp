@@ -1,24 +1,25 @@
-#include "codapt.h"
+#include "pilapt.h"
 #include <iostream>
 using namespace std;
 
 int main(){
-    Coda<int> coda;
-    coda.inCoda(3);
-    coda.inCoda(7);
-    coda.inCoda(8);
+    Pila<int> coda;
+    coda.inPila(3);
+    coda.fuoriPila();
+    if (coda.pilaVuota())
+        cout << "pila vuota" << endl;
+    coda.inPila(7);
+     if (!coda.pilaVuota())
+        cout << "pila vuota" << endl;
+    coda.inPila(8);
 
-    Coda<int> coda2;
-    coda2.inCoda(4);
-    coda2.inCoda(4);
-    coda2.inCoda(4);
-    coda2 = coda;
-    stampaCoda(coda2);
+    Pila<int> coda2(coda);
+    stampaPila(coda2);
     int tmp;
-    while (!coda2.codaVuota()) {
-        tmp = coda2.leggiCoda();
+    while (!coda2.pilaVuota()) {
+        tmp = coda2.leggiPila();
         cout << tmp << " ";
-        coda2.fuoriCoda();
+        coda2.fuoriPila();
     }
 return 0;
 }

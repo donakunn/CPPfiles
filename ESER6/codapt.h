@@ -23,15 +23,17 @@ class Coda
 public:
     Coda();
     ~Coda();
-    Coda(const Coda<T> &C);               //Costruttore di copia
-    Coda<T> &operator=(const Coda<T> &C); //sovraccarico assegnamento
-    bool codaVuota();
-    T leggiCoda();
+    Coda(const Coda<T> &);               //Costruttore di copia
+    Coda<T> &operator=(const Coda<T> &); //sovraccarico assegnamento
+    bool codaVuota() const;
+    T leggiCoda() const;
     void fuoriCoda();
     void inCoda(T a);
 
+    //funzioni di utilità
     template <class elem>
     friend void stampaCoda(Coda<elem> &);
+    int elementiInCoda();
 
 private:
     cella<T> *testa;
@@ -39,7 +41,7 @@ private:
     int size;
 };
 
-template<class T>
+template <class T>
 Coda<T>::Coda()
 {
     testa = nullptr;
@@ -47,7 +49,7 @@ Coda<T>::Coda()
     size = 0;
 }
 
-template<class T>
+template <class T>
 Coda<T>::~Coda()
 {
     while (!codaVuota())
@@ -56,7 +58,7 @@ Coda<T>::~Coda()
     }
 }
 
-template<class T>
+template <class T>
 Coda<T>::Coda(const Coda<T> &C) //Costruttore di copia
 {
     testa = nullptr;
@@ -71,8 +73,8 @@ Coda<T>::Coda(const Coda<T> &C) //Costruttore di copia
     }
 }
 
-template<class T>
-Coda<T>& Coda<T>::operator=(const Coda<T> &C) //sovraccarico assegnamento
+template <class T>
+Coda<T> &Coda<T>::operator=(const Coda<T> &C) //sovraccarico assegnamento
 {
     if (this != &C)
     {
@@ -93,14 +95,14 @@ Coda<T>& Coda<T>::operator=(const Coda<T> &C) //sovraccarico assegnamento
     return *this;
 }
 
-template<class T>
-bool Coda<T>::codaVuota()
+template <class T>
+bool Coda<T>::codaVuota() const
 {
     return testa == nullptr;
 }
 
-template<class T>
-T Coda<T>::leggiCoda()
+template <class T>
+T Coda<T>::leggiCoda() const
 {
     if (!codaVuota())
         return testa->e;
@@ -108,18 +110,21 @@ T Coda<T>::leggiCoda()
         throw "Coda vuota";
 }
 
-template<class T>
+template <class T>
 void Coda<T>::fuoriCoda()
 {
-    cella<T> *t = testa;
-    testa = testa->succ;
-    delete t;
-    size--;
-    if (codaVuota())
-        coda = nullptr;
+    if (!codaVuota())
+    {
+        cella<T> *t = testa;
+        testa = testa->succ;
+        delete t;
+        size--;
+        if (size == 0)
+            coda = nullptr;
+    }
 }
 
-template<class T>
+template <class T>
 void Coda<T>::inCoda(T a)
 {
     cella<T> *tmp = new cella<T>;
@@ -136,6 +141,9 @@ void Coda<T>::inCoda(T a)
     coda = tmp;
     size++;
 }
+
+template <class T>
+int Coda<T>::elementiInCoda() { return size; }
 
 template <class elem>
 void stampaCoda(Coda<elem> &C)
