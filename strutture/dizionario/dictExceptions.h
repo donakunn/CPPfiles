@@ -2,8 +2,8 @@
 #define DICT_EXCEPTIONS_H
 #include <stdexcept>
 
-struct FullSize : public std::invalid_argument {
-    FullSize() : invalid_argument(
+struct hash_table_full : public std::invalid_argument {
+    hash_table_full() : invalid_argument(
         "Dimensione massima raggiunta.") {};
 };
 

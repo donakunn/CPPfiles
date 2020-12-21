@@ -22,10 +22,6 @@ class dictionary
 {
 
 public:
-    virtual ~dictionary() {}
-
-    virtual void create() = 0;
-    // create an empty dictionary
     virtual bool empty() const = 0;
     // return true iff the dictionary is empty
     virtual int size() const = 0;
