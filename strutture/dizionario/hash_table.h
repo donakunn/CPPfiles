@@ -16,15 +16,30 @@ public:
 };
 
 /* a specialization with type string */
-template<>
-size_t hash<string>::operator()(const string the_key) const
+template <>
+class hash<string>
 {
-    unsigned long hash_value = 0;
-    int length = (int)the_key.length();
-    for (int i = 0; i < length; i++)
-        hash_value = 5 * hash_value + the_key.at(i);
-    return size_t(hash_value);
-}
+public:
+    size_t operator()(const string the_key) const
+    {
+        unsigned long hash_value = 0;
+        int length = (int)the_key.length();
+        for (int i = 0; i < length; i++)
+            hash_value = 5 * hash_value + the_key.at(i);
+        return size_t(hash_value);
+    }
+};
+
+/* a specialization with type int */
+template <>
+class hash<int>
+{
+public:
+    size_t operator()(const int the_key) const
+    {
+        return the_key;
+    }
+};
 
 /* = LINEAR PROBING = 
  *
@@ -64,14 +79,14 @@ public:
     int search(const K &) const;
     tupla<K, E> *find(const K &) const;
     void insert(tupla<K, E> &);
-    template <class C, class EL>
-    friend void print(const hash_table<C, EL> &);
+    //template <class C, class EL>
+    //friend void print(const hash_table<C, EL> &);
 
 private:
-    tupla<K, E> **table; // the hash table
-    hash<K> hashm;       // maps type K to nonnegative integer
-    int dsize;           // number of pairs in dictionary
-    int divisor;         // hash function divisor
+    tupla<K, E> **table;     // the hash table
+    hash<K> hashm; // maps type K to nonnegative integer
+    int dsize;               // number of pairs in dictionary
+    int divisor;             // hash function divisor
 };
 
 template <class K, class E>
@@ -82,7 +97,7 @@ hash_table<K, E>::hash_table(int the_divisor)
 
     table = new tupla<K, E> *[divisor];
     for (int i = 0; i < divisor; i++)
-        table[i] = NULL;
+        table[i] = nullptr;
 }
 
 template <class K, class E>
@@ -130,7 +145,7 @@ int hash_table<K, E>::search(const K &the_key) const
     int j = i;
     do
     {
-        if (table[j] == NULL || table[j]->key == the_key)
+        if (table[j] == nullptr || table[j]->key == the_key)
             return j;
         j = (j + 1) % divisor; // the next bucket
     } while (j != i);
@@ -144,8 +159,8 @@ tupla<K, E> *hash_table<K, E>::find(const K &the_key) const
     // search the table
     int b = search(the_key);
     // see if a match was found at table[b]
-    if (table[b] == NULL || table[b]->key != the_key)
-        return NULL; // no match
+    if (table[b] == nullptr || table[b]->key != the_key)
+        return nullptr; // no match
     return table[b]; // matching pair
 }
 
@@ -164,7 +179,7 @@ void hash_table<K, E>::insert(tupla<K, E> &the_pair)
     // search the table for a matching element
     int b = search(the_pair.key);
     // check if matching element found
-    if (table[b] == NULL)
+    if (table[b] == nullptr)
     {
         // no matching element and table not full
         table[b] = new tupla<K, E>(the_pair);
@@ -199,16 +214,17 @@ void hash_table<K, E>::modify(const K &k, const E &e)
     if (table[b]->key == k)
         table[b]->value = e;
 }
-
+/*
 template <class C, class EL>
 void print(const hash_table<C, EL> &H)
 {
+    int size= H.dsize;
     std::cout << "{";
-    for (int i = 0; i < H.dsize; i++)
+    for (tupla<C,EL> *curr = *H.table; curr < *H.table + size; curr++)
     {
-        std::cout << "[" << H.table[i].key << "= " << H.table[i].value << "], ";
+        std::cout << "[" << curr->key << "= " << curr->value << "], ";
     }
     std::cout << "}";
 }
-
+*/
 #endif
