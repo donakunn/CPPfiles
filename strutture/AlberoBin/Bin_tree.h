@@ -13,9 +13,8 @@ class Bin_tree {
     typedef N Nodo;
 
     // operatori
-    virtual void create() = 0;
+    //virtual void create() = 0;
     virtual bool empty() const =  0;
-
     virtual Nodo root() const = 0;
     virtual Nodo parent(Nodo) const =  0;
     virtual Nodo sx(Nodo) const = 0;
