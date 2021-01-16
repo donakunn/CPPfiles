@@ -28,8 +28,8 @@ public:
 
   // costruttori e distruttori
   Bin_treeP();
+  Bin_treeP(const Bin_treeP<T> &);
   ~Bin_treeP();
-  //costruttore di copia?
   // operatori
   //void create() non implementato, si utilizza costruttore di default
   bool empty() const;
@@ -45,6 +45,8 @@ public:
   void ins_root(Nodo);
   void ins_sx(Nodo);
   void ins_dx(Nodo);
+  //void costr(Bin_treeP<T> &);
+  Bin_treeP<T> &operator=(const Bin_treeP<T> &);
 
 private:
   treenode<T> *radice;
@@ -56,10 +58,17 @@ Bin_treeP<T>::Bin_treeP()
   radice = nullptr;
 }
 
+//Bin_treeP(const Bin_treeP<T> &Tree) {
+
+//}
+
 template <class T>
 Bin_treeP<T>::~Bin_treeP()
 {
-  erase(radice);
+  if (!empty())
+  {
+    erase(radice);
+  }
 }
 
 template <class T>
@@ -172,18 +181,24 @@ void Bin_treeP<T>::erase(Nodo n)
       erase(n->sin);
     if (!dx_empty(n))
       erase(n->des);
-    if (n->gen != nullptr)
+    if ((n->gen != nullptr))
     {
       if (n == n->gen->sin)
         n->gen->sin = nullptr;
       else
         n->gen->des = nullptr;
     }
+    if (n == radice)
+      radice = nullptr;
     delete n;
   }
   else
     throw NullNode();
 }
+//template <class T>
+//void Bin_treeP<T>::costr(Bin_treeP<T> &T2) {
+
+//}
 
 template <class T>
 T Bin_treeP<T>::read(Nodo n) const
