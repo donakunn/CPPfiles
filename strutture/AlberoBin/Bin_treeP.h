@@ -45,7 +45,7 @@ public:
   void ins_root(Nodo);
   void ins_sx(Nodo);
   void ins_dx(Nodo);
-  //void costr(Bin_treeP<T> &);
+  void costr(Bin_treeP<T> &);
   Bin_treeP<T> &operator=(const Bin_treeP<T> &);
 
 private:
@@ -195,10 +195,22 @@ void Bin_treeP<T>::erase(Nodo n)
   else
     throw NullNode();
 }
-//template <class T>
-//void Bin_treeP<T>::costr(Bin_treeP<T> &T2) {
-
-//}
+template <class T>
+void Bin_treeP<T>::costr(Bin_treeP<T> &T2)
+{
+  Nodo tmp = this->radice;
+  radice = new treenode<T>;
+  if (tmp != nullptr)
+  {
+    radice->sin = tmp;
+    radice->sin->gen = radice;
+  }
+  if (!T2.empty())
+  {
+    radice->des = T2.root();
+    radice->des->gen = radice;
+  }
+}
 
 template <class T>
 T Bin_treeP<T>::read(Nodo n) const

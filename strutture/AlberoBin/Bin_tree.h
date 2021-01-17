@@ -22,7 +22,7 @@ class Bin_tree {
     virtual bool sx_empty(Nodo) const = 0;
     virtual bool dx_empty(Nodo) const = 0;
 
-    //virtual void costr(const Bin_tree<T,N> &);
+    //virtual void costr(const Bin_tree<T,N> &) = 0;
     virtual void erase(Nodo) = 0;
 
     virtual T read(Nodo) const = 0;
@@ -70,9 +70,5 @@ std::ostream& operator<<(std::ostream& out, const Bin_tree<T, N>& t) {
     t.print();
     return out;
 }
-
-
-
-
 
 #endif /* _BINALBEROC_H_ */
