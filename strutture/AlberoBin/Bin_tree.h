@@ -14,24 +14,24 @@ public:
   typedef N Nodo;
 
   // operatori
-  //virtual void create() = 0;
+  virtual void create() = 0;
   virtual bool empty() const = 0;
   virtual Nodo root() const = 0;
-  virtual Nodo parent(Nodo) const = 0;
-  virtual Nodo sx(Nodo) const = 0;
-  virtual Nodo dx(Nodo) const = 0;
-  virtual bool sx_empty(Nodo) const = 0;
-  virtual bool dx_empty(Nodo) const = 0;
+  virtual Nodo parent(const Nodo) const = 0;
+  virtual Nodo sx(const Nodo) const = 0;
+  virtual Nodo dx(const Nodo) const = 0;
+  virtual bool sx_empty(const Nodo) const = 0;
+  virtual bool dx_empty(const Nodo) const = 0;
 
   //virtual void costr(const Bin_tree<T,N> &) = 0;
-  virtual void erase(Nodo) = 0;
+  virtual void erase(const Nodo) = 0;
 
-  virtual T read(Nodo) const = 0;
-  virtual void write(Nodo, value_type) = 0;
+  virtual T read(const Nodo) const = 0;
+  virtual void write(const Nodo, const value_type) = 0;
 
-  virtual void ins_root(Nodo) = 0;
-  virtual void ins_sx(Nodo) = 0;
-  virtual void ins_dx(Nodo) = 0;
+  virtual void ins_root() = 0;
+  virtual void ins_sx(const Nodo) = 0;
+  virtual void ins_dx(const Nodo) = 0;
 
   // funzioni di servizio da implementare qui
   virtual void previsita(const Bin_tree<T,N> &);

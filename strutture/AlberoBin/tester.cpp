@@ -9,7 +9,7 @@ int main()
 	Bin_treeP<int> T;
 	typename Bin_treeP<int>::Nodo n1, n2;
 
-	T.ins_root(n1);
+	T.ins_root();
 	n2 = T.root();
 	T.write(T.root(), 1);
 	n1 = T.root();

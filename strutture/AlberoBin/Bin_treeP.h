@@ -47,7 +47,7 @@ public:
   Bin_treeP<T> &operator=(const Bin_treeP<T> &); //sovraccarico assegnamento
   ~Bin_treeP();
   // operatori
-  //void create() non implementato, si utilizza costruttore di default
+  void create();
   bool empty() const;
   Nodo root() const;
   Nodo parent(Nodo) const;
@@ -58,7 +58,7 @@ public:
   void erase(Nodo);
   T read(Nodo) const;
   void write(Nodo, value_type);
-  void ins_root(Nodo);
+  void ins_root();
   void ins_sx(Nodo);
   void ins_dx(Nodo);
   void costr(Bin_treeP<T> &);
@@ -70,7 +70,12 @@ private:
 template <class T>
 Bin_treeP<T>::Bin_treeP()
 {
-  radice = nullptr;
+  create();
+}
+
+template <class T>
+void Bin_treeP<T>::create(){
+   radice = nullptr;
 }
 
 template <class T>
@@ -150,7 +155,7 @@ bool Bin_treeP<T>::dx_empty(Bin_treeP<T>::Nodo n) const
 }
 
 template <class T>
-void Bin_treeP<T>::ins_root(Bin_treeP<T>::Nodo n)
+void Bin_treeP<T>::ins_root()
 {
   if (radice == nullptr)
   {

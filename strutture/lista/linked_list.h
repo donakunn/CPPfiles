@@ -1,22 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2016 by Nicola Di Mauro                                 *
- *   ndm@di.uniba.it                                                       *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
 
 #ifndef _LINKED_LIST_H
 #define _LINKED_LIST_H
@@ -150,7 +131,8 @@ typename Linked_list<T>::position Linked_list<T>::previous(position p) const
 {
     if (p != _pHead)
         return (p->_pPrev);
-    else throw "Already on the head of the list";
+    else
+        throw "Already on the head of the list";
 }
 
 template <class T>
@@ -165,7 +147,8 @@ Linked_list<T>::read(position p) const
 {
     if (!end(p))
         return (p->_value);
-    else throw "Can't read from the end of list";
+    else
+        throw "Can't read from the end of list";
 }
 
 template <class T>
