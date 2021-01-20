@@ -1,11 +1,11 @@
 
-#include "TreeList.h"
+#include "TreePtr.h"
 
 int main(){
 
-	TreeList<char> Tree;
+	TreePtr<char> Tree;
 
-	TreeList<char>::node n;
+	TreePtr<char>::node n;
 	Tree.insRoot();
 	Tree.writeNode(Tree.root(),'a');
 
@@ -30,6 +30,9 @@ int main(){
 	Tree.removeSubTree(n);
 
 	Tree.print();	
+
+	TreePtr<char> T2 = Tree;
+	T2.print();
 
 	return 0;
 }

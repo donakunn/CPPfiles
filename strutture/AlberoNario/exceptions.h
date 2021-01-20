@@ -27,5 +27,10 @@ struct LeafNode : public std::domain_error {
         "Nodo foglia.") {};
 };
 
+struct rootNode : public std::domain_error {
+    rootNode() : domain_error(
+        "Impossibile aggiungere fratello a radice.") {};
+};
+
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "Tree.h"
 #include "exceptions.h"
+#include <iostream>
 
 template <class T>
 class TreePtr;
@@ -18,7 +19,7 @@ private:
     treenode<T> *primo;
     treenode<T> *succ;
     //funzione di utility che crea una copia del nodo e di tutti i suoi figli ricorsivamente
-    treenode<T> *NodeCopy(treenode<T> *src, treenode<T> *srcGen) //da sistemare
+    treenode<T> *NodeCopy(treenode<T> *src,treenode<T> *srcGen) //da sistemare
     {
         if (src == nullptr)
             return nullptr;
@@ -27,8 +28,8 @@ private:
             treenode<T> *newNode = new treenode<T>;
             newNode->gen = srcGen;
             newNode->value = src->value;
-            newNode->sin = NodeCopy(src->sin, src);
-            newNode->des = NodeCopy(src->des, src);
+            newNode->primo = NodeCopy(src->primo,newNode);
+            newNode->succ = NodeCopy(src->succ,newNode);
             return newNode;
         }
     }
@@ -53,21 +54,20 @@ public:
     Node firstChild(Node) const;
     bool lastSibling(Node) const;
     Node nextSibling(Node) const;
-    void insFirst(const Node, const Item);
-    void ins(const Node, const Item);
-    // DA IMPLEMENTARE
-    //	 void insFirstSubTree (node, Tree &) = 0;
-    //	 void insSubTree (node, Tree &) = 0;
+    void insFirst(Node, const Item);
+    void ins(Node, const Item);
+    void insFirstSubTree(Node, TreePtr<T> &);
+    void insSubTree(Node, TreePtr<T> &);
     void removeSubTree(Node);
 
-    void writeNode(Node, item);
-    item readNode(Node) const;
+    void writeNode(Node, const Item);
+    Item readNode(const Node) const;
+    void print() const;
 
     //template<class V> void BFS(node);
-    //template<class V> void preorder(node);
-    //template<class V> void postorder(node);
 private:
     treenode<T> *radice;
+    void printNodes(Node) const;
 };
 
 template <class T>
@@ -86,15 +86,15 @@ TreePtr<T>::~TreePtr()
 }
 
 template <class T>
-TreePtr<T>::TreePtr(const TreePtr<T> &T)
+TreePtr<T>::TreePtr(const TreePtr<T> &T2)
 {
     radice = radice->NodeCopy(T2.root(), nullptr);
 }
 
 template <class T>
-TreePtr<T> &TreePtr<T>::operator=(const TreePtr<T> &T)
+TreePtr<T> &TreePtr<T>::operator=(const TreePtr<T> &T2)
 {
-    if (this != &T)
+    if (this != &T2)
     {
         removeSubTree(this->radice);
         radice = radice->NodeCopy(T2.root(), nullptr);
@@ -129,13 +129,13 @@ void TreePtr<T>::insRoot()
 }
 
 template <class T>
-Node TreePtr<T>::root() const
+typename TreePtr<T>::Node TreePtr<T>::root() const
 {
     return (radice);
 }
 
 template <class T>
-Node TreePtr<T>::parent(Node n) const
+typename TreePtr<T>::Node TreePtr<T>::parent(Node n) const
 {
     if (n != radice)
         return (n->gen);
@@ -146,11 +146,11 @@ Node TreePtr<T>::parent(Node n) const
 template <class T>
 bool TreePtr<T>::leaf(Node n) const
 {
-    return (n->first == nullptr);
+    return (n->primo == nullptr);
 }
 
 template <class T>
-Node TreePtr<T>::firstChild(Node n) const
+typename TreePtr<T>::Node TreePtr<T>::firstChild(Node n) const
 {
     if (!leaf(n))
         return (n->primo);
@@ -161,36 +161,197 @@ Node TreePtr<T>::firstChild(Node n) const
 template <class T>
 bool TreePtr<T>::lastSibling(Node n) const
 {
-    return (n->next == nullptr);
+    return (n->succ == nullptr);
 }
 
 template <class T>
-Node TreePtr<T>::nextSibling(Node n) const
+typename TreePtr<T>::Node TreePtr<T>::nextSibling(Node n) const
 {
     if (!lastSibling(n))
-        return (n->next);
+        return (n->succ);
     else
         throw NullNode();
 }
 
 template <class T>
-void TreePtr<T>::insFirst(const Node n, const Item i)
+void TreePtr<T>::insFirst(Node n, const Item i)
 {
     if (leaf(n))
     {
-        n->first = new treenode<T>;
-        n->first->value = i;
-         n->first->first = nullptr;
-          n->first->next = nullptr;
-          n->first->gen = n;
+        n->primo = new treenode<T>;
+        n->primo->value = i;
+        n->primo->primo = nullptr;
+        n->primo->succ = nullptr;
+        n->primo->gen = n;
     }
-    else {
-        treenode t = new treenode<T>;
-        t->next = n->first;
+    else
+    {
+        treenode<T> *t = new treenode<T>;
+        t->succ = n->primo;
         t->value = i;
-        t->first = nullptr;
+        t->primo = nullptr;
         t->gen = n;
-        n->first = t;
+        n->primo = t;
     }
 }
+
+template <class T>
+void TreePtr<T>::ins(Node n, const Item i)
+{
+    if (n->succ == nullptr)
+    {
+        treenode<T> *t = new treenode<T>;
+        t->value = i;
+        t->gen = n->gen;
+        t->primo = nullptr;
+        t->succ = nullptr;
+        n->succ = t;
+    }
+    else
+    {
+        Node tmp = n->succ;
+        treenode<T> *t = new treenode<T>;
+        t->value = i;
+        t->gen = n->gen;
+        t->primo = nullptr;
+        t->succ = tmp;
+        n->succ = t;
+    }
+}
+
+template <class T>
+void TreePtr<T>::removeSubTree(Node n)
+{
+    if (n == nullptr)
+        throw NullNode();
+    while (!leaf(n))
+        removeSubTree(n->primo);
+    if (n->gen != nullptr)
+    {
+        Node p = n->gen;
+        if (p->primo == n)
+        {
+            p->primo = n->succ;
+        }
+        else
+        {
+            Node tmp = p->primo;
+            while (tmp->succ != n)
+                tmp = tmp->succ;
+            tmp->succ = n->succ;
+        }
+        if (n == radice)
+            radice = nullptr;
+        delete n;
+    }
+}
+
+template <class T>
+void TreePtr<T>::insFirstSubTree(Node n, TreePtr<T> &T2)
+{
+    if (this.empty() || T2.empty())
+        throw EmptyTree();
+    if (n == nullptr)
+        throw NullNode();
+    Node oldRoot = T2.root();
+    if (leaf(n))
+    {
+        n->first = oldRoot;
+        oldRoot->gen = n;
+    }
+    else
+    {
+        Node tmp = n->primo;
+        n->first = oldRoot;
+        oldRoot->gen = n;
+        oldRoot->next = tmp;
+    }
+}
+
+template <class T>
+void TreePtr<T>::insSubTree(Node n, TreePtr<T> &T2)
+{
+    if (this.empty() || T2.empty())
+        throw EmptyTree();
+    if (this.radice() == n)
+        throw rootNode();
+    if (n == nullptr)
+        throw NullNode();
+    Node oldRoot = T2.root();
+    if (n->next == nullptr)
+    {
+        n->next = oldRoot;
+        oldRoot->gen = n->gen;
+    }
+    else
+    {
+        Node tmp = n->next;
+        n->next = oldRoot;
+        oldRoot->gen = n->gen;
+        oldRoot->next = tmp;
+    }
+}
+
+template <class T>
+void TreePtr<T>::writeNode(Node n, const Item i)
+{
+    if (n != nullptr)
+        n->value = i;
+    else
+        throw NullNode();
+}
+
+template <class T>
+typename TreePtr<T>::Item TreePtr<T>::readNode(const Node n) const
+{
+    if (n != nullptr)
+        return n->value;
+    else
+        throw NullNode();
+}
+
+template <class T>
+void TreePtr<T>::print() const
+{
+    std::cout << "\n{ ";
+    if (this->empty())
+    {
+        std::cout << "}\n";
+    }
+    else
+    {
+        Node it = radice;
+        std::cout << "\n"
+                 << readNode(it) << ": ";
+        it = it->primo;
+            printNodes(it);
+            std::cout <<"\n";
+        while (it != nullptr)
+        {   if (it->primo != nullptr) {
+            std::cout << "\n"
+                 << readNode(it) << ": ";
+            it = it->primo;
+            printNodes(it);
+            std::cout <<"\n";
+        }
+         else break;
+        }
+        std::cout << "}\n";
+    }
+}
+
+template <class T>
+void TreePtr<T>::printNodes(Node n) const //stampa il nodo e tutti i suoi fratelli
+{
+    if (n == nullptr)
+        return;
+    else
+    {
+        while(n != nullptr) {
+            std::cout << n->value << " ";
+            n = n->succ;
+        }
+    }
+}
+
 #endif /* _Bin_treeP_H_ */
