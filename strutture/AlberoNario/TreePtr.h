@@ -29,7 +29,7 @@ private:
             newNode->gen = srcGen;
             newNode->value = src->value;
             newNode->primo = NodeCopy(src->primo,newNode);
-            newNode->succ = NodeCopy(src->succ,newNode);
+            newNode->succ = NodeCopy(src->succ,newNode->gen);
             return newNode;
         }
     }
@@ -240,55 +240,55 @@ void TreePtr<T>::removeSubTree(Node n)
                 tmp = tmp->succ;
             tmp->succ = n->succ;
         }
-        if (n == radice)
+    }
+     if (n == radice)
             radice = nullptr;
         delete n;
-    }
 }
 
 template <class T>
 void TreePtr<T>::insFirstSubTree(Node n, TreePtr<T> &T2)
 {
-    if (this.empty() || T2.empty())
+    if (this->empty() || T2.empty())
         throw EmptyTree();
     if (n == nullptr)
         throw NullNode();
     Node oldRoot = T2.root();
     if (leaf(n))
     {
-        n->first = oldRoot;
+        n->primo = oldRoot;
         oldRoot->gen = n;
     }
     else
     {
         Node tmp = n->primo;
-        n->first = oldRoot;
+        n->primo = oldRoot;
         oldRoot->gen = n;
-        oldRoot->next = tmp;
+        oldRoot->succ = tmp;
     }
 }
 
 template <class T>
 void TreePtr<T>::insSubTree(Node n, TreePtr<T> &T2)
 {
-    if (this.empty() || T2.empty())
+    if (this->empty() || T2.empty())
         throw EmptyTree();
-    if (this.radice() == n)
+    if (this->root() == n)
         throw rootNode();
     if (n == nullptr)
         throw NullNode();
     Node oldRoot = T2.root();
-    if (n->next == nullptr)
+    if (n->succ == nullptr)
     {
-        n->next = oldRoot;
+        n->succ = oldRoot;
         oldRoot->gen = n->gen;
     }
     else
     {
-        Node tmp = n->next;
-        n->next = oldRoot;
+        Node tmp = n->succ;
+        n->succ = oldRoot;
         oldRoot->gen = n->gen;
-        oldRoot->next = tmp;
+        oldRoot->succ = tmp;
     }
 }
 
@@ -334,7 +334,7 @@ void TreePtr<T>::print() const
             printNodes(it);
             std::cout <<"\n";
         }
-         else break;
+         else it = it->succ;
         }
         std::cout << "}\n";
     }
