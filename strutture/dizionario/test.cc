@@ -13,10 +13,12 @@ int main()
     std::cout << t1->value << endl;
     dic.modify("test", "modificato");
     std::cout << t1->value << endl;
+    dic.print();
     dic.erase("test");
     tupla<string, string> *t2 = dic.find("test");
     if (t2 != nullptr)
     {
         std::cout << t2->value << endl;
     }
+    dic.print();
 }

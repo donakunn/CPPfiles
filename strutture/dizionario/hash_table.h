@@ -80,7 +80,7 @@ public:
     tupla<K, E> *find(const K &) const;
     void insert(tupla<K, E> &);
     //template <class C, class EL>
-    //friend void print(const hash_table<C, EL> &);
+    void print() const;
 
 private:
     tupla<K, E> **table;     // the hash table
@@ -205,6 +205,8 @@ void hash_table<K, E>::erase(const K &k)
     int b = search(k);
     if (table[b]->key == k)
         delete table[b];
+        table[b] = nullptr;
+        dsize --;
 }
 
 template <class K, class E>
@@ -214,17 +216,18 @@ void hash_table<K, E>::modify(const K &k, const E &e)
     if (table[b]->key == k)
         table[b]->value = e;
 }
-/*
-template <class C, class EL>
-void print(const hash_table<C, EL> &H)
+
+template <class K, class E>
+void hash_table<K, E>::print() const
 {
-    int size= H.dsize;
-    std::cout << "{";
-    for (tupla<C,EL> *curr = *H.table; curr < *H.table + size; curr++)
-    {
-        std::cout << "[" << curr->key << "= " << curr->value << "], ";
+    std::cout << "\n{";
+    tupla<K,E> *tmp;
+    for (int i = 0; i < divisor; i++)
+    { 
+        tmp = table[i];
+        if (tmp != nullptr)
+            std::cout << "[" << tmp->key << "= " << tmp->value << "] ";
     }
-    std::cout << "}";
+    std::cout << "}\n";
 }
-*/
 #endif
