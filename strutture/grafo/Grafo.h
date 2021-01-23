@@ -11,7 +11,7 @@ template<class E, class P, class N>
 	typedef N Nodo;
 
 	typedef Linked_list<Nodo*> ListaNodi;
-	typedef typename Linked_list<Nodo*>::position ListaNodiPos;	
+	//typedef typename Linked_list<Nodo*>::position ListaNodiPos;	
 	virtual bool vuoto() const = 0;
 	virtual void insNodo(Nodo&) = 0;
 	virtual void insArco(Nodo, Nodo, Peso) = 0;

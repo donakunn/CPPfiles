@@ -35,7 +35,6 @@ public:
   typedef P Peso;
   typedef Nodo<E, P> *Nodo;
   typedef NodoPesato<E, P> *NodoPesato;
-  //typedef Arco_<Peso, Nodo> Arco;
   typedef Grafo<Etichetta, Peso, Nodo> Grafo_;
   typedef typename Grafo_::ListaNodi ListaNodi;
   typedef typename Grafo_::ListaNodiPos ListaNodiPos;
@@ -51,7 +50,7 @@ public:
   void cancNodo(Nodo);
   void cancArco(Nodo, Nodo);
   bool esisteNodo(Nodo);
-  bool esisteArco(Nodo,Nodo);
+  bool esisteArco(Nodo, Nodo);
   ListaNodi Adiacenti(Nodo) const;
   ListaNodi list_nodi() const;
   Etichetta leggiEtichetta(Nodo) const;
@@ -100,20 +99,45 @@ GrafoPtr<E, P>::~GrafoPtr()
 }
 
 template <class E, class P>
-bool GrafoPtr<E, P>::vuoto()
+bool GrafoPtr<E, P>::vuoto() const
 {
   return (listaNodi.empty());
 }
 
 template <class E, class P>
-void GrafoPtr<E, P>::insNodo(Nodo nodo)
+bool GrafoPtr<E, P>::esisteNodo(Nodo n)
 {
-  for (Nodo n : listaNodi)
+  if (n == nullptr || listaNodi.empty())
+    return false;
+  for (Nodo u : listaNodi)
   {
-    if (n == nodo)      //da cambiare con esiste nodo
-      throw NodeExists();
+    if (u == n)
+      GrafoPtr<E, P>::return true;
   }
-  listaNodi.insert(nodo, listaNodi.begin());
+  return false;
+}
+
+template <class E, class P>
+bool GrafoPtr<E, P>::esisteArco(Nodo n1, Nodo n2)
+{
+  if (n1 == nullptr || n2 == nullptr)
+    throw NullNode();
+  if (n1->A.empty())
+    return false;
+  for (NodoPesato u : n1->A)
+  {
+    if (u->succ == n2)
+      return true;
+  }
+  return false;
+}
+
+template <class E, class P>
+void GrafoPtr<E, P>::insNodo(Nodo n)
+{
+  if (esisteNodo(n))
+    throw NodeExists();
+  listaNodi.insert(n, listaNodi.begin());
 }
 
 template <class E, class P>
@@ -121,26 +145,14 @@ void GrafoPtr<E, P>::insArco(Nodo n1, Nodo n2, Peso p)
 {
   if (n1 == nullptr || n2 == nullptr)
     throw NullNode();
-  for (Nodo u : listaNodi)
+  if (esisteNodo(n1) && esisteNodo(n2))
   {
-    if (u == n1)
-    {
-      for (nodo v : listaNodi)
-      {
-        if (v == n2)
-        {
-          for (NodoPesato w : n1->A)
-          {
-            if (w->succ == n2)
-              throw ArcExists();
-          }
-          n1->A.insert(n2, n1->A.begin());
-        }
-      }
-      throw NullNode();
-    }
+    if (esisteArco(n1, n2))
+      throw ArcExists();
+    n1->A.insert(n2, n1->A.begin()) //provare con end()?
   }
-  throw NullNode();
+  else
+    throw NullNode();
 }
 
 template <class E, class P>
@@ -168,18 +180,70 @@ void GrafoPtr<E, P>::cancArco(Nodo n1, Nodo n2)
     throw NullNode();
   if (n1->A.empty())
     throw ArcDoesntExists();
-  for (NodoPesato u : n1->A) {
+  for (NodoPesato u : n1->A)
+  {
     if (u->succ == n2)
       n1->A.erase(u);
-      return;
+    return;
   }
   throw ArcDoesntExists();
 }
-bool esisteNodo(Nodo);
-bool esisteArco(Nodo,Nodo);
-ListaNodi Adiacenti(Nodo) const;
-ListaNodi list_nodi() const;
-Etichetta leggiEtichetta(Nodo) const;
-void scriviEtichetta(Nodo, Etichetta);
-Peso leggiPeso(Nodo, Nodo) const;
-void scriviPeso(Nodo, Nodo, Peso);
+
+template <class E, class P>
+ListaNodi GrafoPtr<E, P>::Adiacenti(Nodo n) const
+{
+  Linked_list<Nodo> listaAdiacenti; //serve operatore new?
+  for (NodoPesato u : n->A)
+  {
+    listaAdiacenti.insert(u->succ);
+  }
+  return (listaAdiacenti);
+}
+
+template <class E, class P>
+ListaNodi GrafoPtr<E, P>::list_nodi() const
+{
+  return (listaNodi);
+}
+
+template <class E, class P>
+Etichetta GrafoPtr<E, P>::leggiEtichetta(Nodo n) const
+{
+  if (!esisteNodo(n))
+    throw NullNode();
+  return (n->label);
+}
+
+template <class E, class P>
+void GrafoPtr<E, P>::scriviEtichetta(Nodo n, Etichetta e)
+{
+   if (!esisteNodo(n))
+    throw NullNode();
+  n->label = e;
+}
+
+template <class E, class P>
+Peso GrafoPtr<E, P>::leggiPeso(Nodo n1, Nodo n2) const {
+  if (!esisteNodo(n1) || !esisteNodo(n2))
+    throw NullNode();
+  for (NodoPesato u : n1->A)
+  {
+    if (u->succ == n2)
+      return u->pesoArco;
+  }
+  throw ArcDoesntExists();
+}
+
+template <class E, class P>
+void GrafoPtr<E, P>::scriviPeso(Nodo n1, Nodo n2, Peso p) {
+  if (!esisteNodo(n1) || !esisteNodo(n2))
+    throw NullNode();
+  for (NodoPesato u : n1->A)
+  {
+    if (u->succ == n2)
+      u->pesoArco = p;
+  }
+  throw ArcDoesntExists();
+}
+
+#endif

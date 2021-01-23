@@ -4,12 +4,12 @@
 
 struct NullNode : public std::invalid_argument {
     NullNode() : invalid_argument(
-        "Parametro nodo nullo.") {};
+        "Nodo non presente nel grafo.") {};
 };
 
 struct EmptyGraph : public std::domain_error {
-    EmptyTree() : domain_error(
-        "Albero vuoto.") {};
+    EmptyGraph() : domain_error(
+        "Grafo vuoto.") {};
 };
 
 struct NodeExists : public std::domain_error {
@@ -24,8 +24,7 @@ struct ArcExists : public std::domain_error {
 
 struct ArcExistsOnDel : public std::domain_error {
     ArcExistsOnDel() : domain_error(
-        "Impossibile cancellare. 
-        esiste arco collegato al nodo") {};
+        "Impossibile cancellare.esiste arco collegato al nodo") {};
 };
 
 struct ArcDoesntExists : public std::domain_error {
