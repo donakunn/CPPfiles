@@ -50,6 +50,11 @@ public:
     Linked_list<T> &operator=(const Linked_list<T> &); // the assignment operator
     bool operator==(const Linked_list<T> &) const;     // tests two list for equality
 
+    //funzioni di servizio
+    int ListLength() const {
+        return _length;
+    }
+    
 private:
     List_node<T> *_pHead;
     int _length; // the length of the list
@@ -193,15 +198,11 @@ Linked_list<T> &Linked_list<T>::operator=(const Linked_list<T> &L)
         _pHead = new List_node<T>;
         _pHead->_pNext = _pHead;
         _pHead->_pPrev = _pHead;
-
-        cout << L.empty();
-        cout << L.size();
         if (!L.empty())
         {
             position p = L.last();
             for (int i = 0; i < L.size(); i++)
             {
-                cout << i, L.read(p);
                 insert(L.read(p), begin());
                 p = L.previous(p);
             }

@@ -25,8 +25,6 @@ template<class I, class N>
 
 	virtual void writeNode (node, const item) = 0;
 	virtual item readNode (const node) const = 0;
-
-	//template<class V> void BFS(node);
 	virtual void preorder(node);
 	virtual void postorder(node);
 	virtual void inorder(node);

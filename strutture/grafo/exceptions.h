@@ -7,6 +7,11 @@ struct NullNode : public std::invalid_argument {
         "Nodo non presente nel grafo.") {};
 };
 
+struct FullArray : public std::invalid_argument {
+    FullArray() : invalid_argument(
+        "Array pieno. impossibile aggiungere nodo") {};
+};
+
 struct EmptyGraph : public std::domain_error {
     EmptyGraph() : domain_error(
         "Grafo vuoto.") {};
