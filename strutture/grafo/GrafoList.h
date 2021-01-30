@@ -18,6 +18,13 @@ public:
     }
     int getId() { return nodoId; }
     void setId(int id) { nodoId = id; }
+    bool operator==(const NodoG &node) const
+    {
+        if (this->nodoId == node.nodoId)
+            return true;
+        else
+            return false;
+    }
 
 private:
     int nodoId;
@@ -45,6 +52,24 @@ public:
         info = 0;
         vuoto = true;
     }
+    InfoNodo(const InfoNodo<E, P> &N)
+    {
+        this.etichetta = N.etichetta;
+        this.vuoto = N.vuoto;
+        this.info = N.info;
+        this.archi = N.archi;
+    }
+    InfoNodo<E, P> &operator=(const InfoNodo<E, P> &N)
+    {
+        if (this != &N)
+        {
+            this->etichetta = N.etichetta;
+            this->vuoto = N.vuoto;
+            this->info = N.info;
+            this->archi = N.archi;
+        }
+        return *this;
+    }
 };
 
 template <class E, class P>
@@ -60,6 +85,8 @@ public:
     typedef typename Grafo_::ListaNodiPos ListaNodiPos;
 
     GrafoList(int);
+    GrafoList(const GrafoList<E, P> &);
+    GrafoList<E, P> &operator=(const GrafoList<E, P> &);
     ~GrafoList();
 
     bool vuoto() const;
@@ -102,6 +129,37 @@ GrafoList<E, P>::GrafoList(int _dimensione)
     arrayNodi = new InfoNodo<E, P>[dimensione];
     for (int i = 0; i < dimensione; i++)
         arrayNodi[i].archi.create();
+}
+
+template <class E, class P>
+GrafoList<E, P>::GrafoList(const GrafoList<E, P> &G)
+{
+    this->dimensione = G.dimensione;
+    this->nodi = G.nodi;
+    this->archi = G.archi;
+    arrayNodi = new InfoNodo<E, P>[dimensione];
+    for (int i = 0; i < dimensione; i++)
+    {
+        this->arrayNodi[i] = G.arrayNodi[i];
+    }
+}
+
+template <class E, class P>
+GrafoList<E, P> &GrafoList<E, P>::operator=(const GrafoList<E, P> &G)
+{
+    if (this != &G)
+    {
+        delete[] arrayNodi;
+        this->dimensione = G.dimensione;
+        this->nodi = G.nodi;
+        this->archi = G.archi;
+        arrayNodi = new InfoNodo<E, P>[dimensione];
+        for (int i = 0; i < dimensione; i++)
+        {
+            this->arrayNodi[i] = G.arrayNodi[i];
+        }
+    }
+    return *this;
 }
 
 template <class E, class P>
@@ -316,8 +374,8 @@ void GrafoList<E, P>::print()
             s = LAdiac.begin();
             while (!LAdiac.end(s))
             {
-                std::cout << leggiEtichetta(*(LAdiac.read(s))) << "[" 
-                    << leggiPeso(*(L.read(p)),*(LAdiac.read(s))) << "] ";
+                std::cout << leggiEtichetta(*(LAdiac.read(s))) << "["
+                          << leggiPeso(*(L.read(p)), *(LAdiac.read(s))) << "] ";
                 s = LAdiac.next(s);
             }
             std::cout << endl;

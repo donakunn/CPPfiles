@@ -52,7 +52,7 @@ public:
     bool operator==(const Linked_list<T> &) const;     // tests two list for equality
 
     //funzioni di servizio
-    int ListLength() const {
+    int size() const {
         return _length;
     }
     

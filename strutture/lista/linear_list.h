@@ -29,7 +29,7 @@ public:
     virtual void erase(position pos) = 0;                    // ersaes the element at position pos
 
     // funzioni di servizio
-    int size() const;      // returns the size of the list
+    virtual int size() const =0;      // returns the size of the list
     position last() const; //returns a position pointing to last element of the list
     template <class U, class Q>
     friend ostream &operator<<(ostream &, const Linear_list<U, Q> &);
@@ -41,21 +41,6 @@ public:
     void reverse();                      //return a list with elements in inverted order
     bool palindrome() const;             //true if the list palindrome, false otherwise
 };
-
-template <class T, class P>
-int Linear_list<T, P>::size() const
-{
-    typename Linear_list<T, P>::position p;
-    p = this->begin();
-    int sizeList = 0;
-    while (!this->end(p))
-    {
-        sizeList++;
-        p = this->next(p);
-    }
-    return sizeList;
-}
-
 /* sovraccarica <<. Attenzione se il tipo restituito da read non Ã¨ primitivo, allora
  * anche per questo tipo bisogna sovraccaricare l'operatore << 
  */

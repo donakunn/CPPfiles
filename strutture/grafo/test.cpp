@@ -35,12 +35,8 @@ int main()
 	G.insArco(n5, n3, 0.2);
 	G.insArco(n6, n4, 0.1);
 	G.scriviPeso(n5,n3, 3.0);
-
-	G.print();
-	G.cancArco(n3, n6);
-	G.cancArco(n2, n6);
-	G.cancArco(n6, n4);
-	G.cancNodo(n6);
-
+	GrafoList<string, double> G2(G);
+	G2.print();
+	G = G2;
 	G.print();
 }
