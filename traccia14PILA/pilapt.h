@@ -2,7 +2,6 @@
 #define _PILAVT_H
 
 #include <iostream>
-#include "exceptions.h"
 template <class T>
 class Pila;
 
@@ -21,7 +20,7 @@ class Pila
 {
 public:
   typedef T tipoelem;
-  Pila();          //corrisponde a creaPila()
+  Pila();          
   ~Pila();         //costruttore di copia
   Pila(Pila<T> &); //sovraccarico assegnamento
   Pila<T> &operator=(Pila<T> &);
@@ -125,7 +124,7 @@ T Pila<T>::leggiPila() const
   if (!pilaVuota())
     return testa->e;
   else
-    throw emptyStack();
+    throw "Pila vuota";
 }
 
 template <class T>

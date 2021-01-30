@@ -58,7 +58,7 @@ void Tree<I,N>::postorder(node n) {
 }
 
 template <class I, class N>
-void Tree<I,N>::inorder(node n) { //per i = 1
+void Tree<I,N>::inorder(node n) {
 	if (leaf(n)) {
 		//esamina nodo
 	}
